@@ -20,7 +20,7 @@ class SettingsViewController: UIViewController {
         
         minimumValueTF.delegate = self
         maximumValueTF.delegate = self
-
+        
         minimumValueTF.text = String(randomNumber.minimumValue)
         maximumValueTF.text = String(randomNumber.maximumValue)
     }

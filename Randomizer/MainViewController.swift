@@ -34,7 +34,7 @@ class MainViewController: UIViewController {
         settingsVC.randomNumber = randomNumber
         settingsVC.delegate = self
     }
-
+    
     @IBAction func getRandomNumberButtonTapped() {
         randomValueLabel.text = String(randomNumber.getRandom)
     }
@@ -46,7 +46,5 @@ extension MainViewController: SettingsViewControllerDelegate {
         maximumValueLabel.text = String(randomNumber.maximumValue)
         self.randomNumber = randomNumber
     }
-    
-    
 }
 
