@@ -2,7 +2,7 @@
 //  RandomNumber.swift
 //  Randomizer
 //
-//  Created by Matvei Khlestov on 28.05.2022.
+//  Created by Matvei Khlestov on 23.07.2023.
 //
 
 import Foundation
