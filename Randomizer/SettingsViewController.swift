@@ -9,58 +9,40 @@ import UIKit
 
 class SettingsViewController: UIViewController {
     
+    var minimumValue = ""
+    var maximumValue = ""
+    
+    var delegate: SettingsViewControllerDelegate!
+    
     private let stackViewForTextfields = UIStackView()
     private let stackViewForButtons = UIStackView()
     
     private lazy var minimumValueTF: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Minimum Value"
-        textField.borderStyle = .roundedRect
-        
-        return textField
+        createTextfield(minimumValue, "Minimum Value")
     }()
     
     private lazy var maximumValueTF: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Maximum Value"
-        textField.borderStyle = .roundedRect
-        
-        return textField
+        createTextfield(maximumValue, "Maximum Value")
     }()
     
     private lazy var saveButton: UIButton = {
-        var attributes = AttributeContainer()
-        attributes.font = .systemFont(ofSize: 30)
-        
-        var buttonConfiguration = UIButton.Configuration.plain()
-        buttonConfiguration.attributedTitle = AttributedString("Save", attributes: attributes)
-        
-        let button = UIButton(configuration: buttonConfiguration, primaryAction: UIAction { [unowned self] _ in
-            saveButtonTapped()
-            dismiss(animated: true)
-        })
-        
-        return button
+        createButton(
+            withTitle: "Save",
+            andColor: UIColor(named: "saveButtonColor") ?? .systemPink,
+            action: UIAction { [unowned self] _ in
+                saveButtonTapped()
+                dismiss(animated: true)
+            })
     }()
     
     private lazy var cancelButton: UIButton = {
-        var attributes = AttributeContainer()
-        attributes.font = .systemFont(ofSize: 30)
-        attributes.foregroundColor = UIColor(named: "cancelButtonColor")
-        
-        var buttonConfiguration = UIButton.Configuration.plain()
-        buttonConfiguration.attributedTitle = AttributedString("Cancel", attributes: attributes)
-        
-        let button = UIButton(configuration: buttonConfiguration, primaryAction: UIAction { [unowned self] _ in
-            dismiss(animated: true)
-        })
-        
-        return button
+        createButton(
+            withTitle: "Cancel",
+            andColor: UIColor(named: "cancelButtonColor") ?? .systemPink,
+            action: UIAction { [unowned self] _ in
+                dismiss(animated: true)
+            })
     }()
-    
-    var randomNumber: RandomNumber!
-    
-    var delegate: SettingsViewControllerDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,13 +60,28 @@ class SettingsViewController: UIViewController {
         stackViewsConfigure()
         
         setConstraints()
-        
-        setupTextfields()
     }
     
-    private func setupTextfields() {
-        minimumValueTF.text = String(randomNumber.minimumValue)
-        maximumValueTF.text = String(randomNumber.maximumValue)
+    private func createButton(withTitle title: String, andColor color: UIColor, action: UIAction) -> UIButton {
+        var attributes = AttributeContainer()
+        attributes.font = .systemFont(ofSize: 30)
+        attributes.foregroundColor = color
+        
+        var buttonConfiguration = UIButton.Configuration.plain()
+        buttonConfiguration.attributedTitle = AttributedString(title, attributes: attributes)
+        
+        let button = UIButton(configuration: buttonConfiguration, primaryAction: action)
+        
+        return button
+    }
+    
+    private func createTextfield(_ text: String, _ placeholder: String) -> UITextField {
+        let textField = UITextField()
+        textField.text = text
+        textField.placeholder = placeholder
+        textField.borderStyle = .roundedRect
+        
+        return textField
     }
     
     private func saveButtonTapped() {

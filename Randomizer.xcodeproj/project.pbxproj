@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A0223A492A6D56D7001EFDF1 /* RandomNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0223A482A6D56D7001EFDF1 /* RandomNumber.swift */; };
 		A0F0A3E528421AA400F248B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F0A3E428421AA400F248B6 /* AppDelegate.swift */; };
 		A0F0A3E728421AA400F248B6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F0A3E628421AA400F248B6 /* SceneDelegate.swift */; };
 		A0F0A3E928421AA400F248B6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F0A3E828421AA400F248B6 /* MainViewController.swift */; };
@@ -17,7 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A0223A482A6D56D7001EFDF1 /* RandomNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomNumber.swift; sourceTree = "<group>"; };
 		A0F0A3E128421AA400F248B6 /* Randomizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Randomizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0F0A3E428421AA400F248B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0F0A3E628421AA400F248B6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,7 +59,6 @@
 				A0F0A3E428421AA400F248B6 /* AppDelegate.swift */,
 				A0F0A3E628421AA400F248B6 /* SceneDelegate.swift */,
 				A0F0A3E828421AA400F248B6 /* MainViewController.swift */,
-				A0223A482A6D56D7001EFDF1 /* RandomNumber.swift */,
 				A0F0A3F8284246CE00F248B6 /* SettingsViewController.swift */,
 				A0F0A3ED28421AA500F248B6 /* Assets.xcassets */,
 				A0F0A3EF28421AA500F248B6 /* LaunchScreen.storyboard */,
@@ -142,7 +139,6 @@
 			files = (
 				A0F0A3E928421AA400F248B6 /* MainViewController.swift in Sources */,
 				A0F0A3E528421AA400F248B6 /* AppDelegate.swift in Sources */,
-				A0223A492A6D56D7001EFDF1 /* RandomNumber.swift in Sources */,
 				A0F0A3E728421AA400F248B6 /* SceneDelegate.swift in Sources */,
 				A0F0A3F9284246CE00F248B6 /* SettingsViewController.swift in Sources */,
 			);

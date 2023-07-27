@@ -12,37 +12,22 @@ protocol SettingsViewControllerDelegate {
 }
 
 class MainViewController: UIViewController {
-
+    
     private let stackView = UIStackView()
     
+    private var minimumValue = 0
+    private var maximumValue = 100
+    
     private lazy var minimumValueLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(randomNumber.minimumValue)
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 50)
-        label.adjustsFontSizeToFitWidth = true
-        
-        return label
+        createLabel(with: String(minimumValue), andFont: .systemFont(ofSize: 50))
     }()
     
     private lazy var maximumValueLabel: UILabel = {
-        let label = UILabel()
-        label.text = String(randomNumber.maximumValue)
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 50)
-        label.adjustsFontSizeToFitWidth = true
-        
-        return label
+        createLabel(with: String(maximumValue), andFont: .systemFont(ofSize: 50))
     }()
     
     private lazy var randomValueLabel: UILabel = {
-        let label = UILabel()
-        label.text = "?"
-        label.font = UIFont.systemFont(ofSize: 98, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.adjustsFontSizeToFitWidth = true
-        
-        return label
+        createRandomValueLabel()
     }()
     
     private lazy var labelPretextFrom: UILabel = {
@@ -70,7 +55,9 @@ class MainViewController: UIViewController {
         return button
     }()
     
-    private var randomNumber = RandomNumber(minimumValue: 0, maximumValue: 100)
+    var getRandom: Int {
+        Int.random(in: minimumValue...maximumValue)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +98,8 @@ class MainViewController: UIViewController {
     
     @objc private func settingsButtonTapped() {
         let settingsViewController = SettingsViewController()
-        settingsViewController.randomNumber = randomNumber
+        settingsViewController.minimumValue = minimumValueLabel.text ?? "0"
+        settingsViewController.maximumValue = maximumValueLabel.text ?? "100"
         settingsViewController.delegate = self
         
         present(settingsViewController, animated: true)
@@ -146,7 +134,7 @@ class MainViewController: UIViewController {
     }
     
     private func getRandomNumberButton() {
-        randomValueLabel.text = String(randomNumber.getRandom)
+        randomValueLabel.text = String(getRandom)
     }
     
     private func createLabel(with text: String, andFont: UIFont) -> UILabel {
@@ -155,6 +143,16 @@ class MainViewController: UIViewController {
         label.textAlignment = .center
         label.font = andFont
         label.adjustsFontSizeToFitWidth = true
+        
+        return label
+    }
+    
+    private func createRandomValueLabel() -> UILabel {
+        let label = UILabel()
+        label.text = "?"
+        label.font = UIFont.systemFont(ofSize: 98, weight: .semibold)
+        label.adjustsFontSizeToFitWidth = true
+        label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
     }
@@ -190,8 +188,6 @@ extension MainViewController: SettingsViewControllerDelegate {
         minimumValueLabel.text = minimumNumber
         maximumValueLabel.text = maximumNumber
     }
-    
-    
 }
 
 
