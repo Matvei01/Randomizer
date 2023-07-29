@@ -8,26 +8,21 @@
 import UIKit
 
 protocol SettingsViewControllerDelegate {
-    func setNewValues(for minimumNumber: String, and maximumNumber: String)
+    func setNewValues(for randomNumber: RandomNumber)
 }
 
 class MainViewController: UIViewController {
     
+    private var randomNumber = RandomNumber(minimumValue: 0, maximumValue: 100)
+    
     private let stackView = UIStackView()
     
-    private var minimumValue = 0
-    private var maximumValue = 100
-    
     private lazy var minimumValueLabel: UILabel = {
-        createLabel(with: String(minimumValue), andFont: .systemFont(ofSize: 50))
+        createLabel(with: String(randomNumber.minimumValue), andFont: .systemFont(ofSize: 50))
     }()
     
     private lazy var maximumValueLabel: UILabel = {
-        createLabel(with: String(maximumValue), andFont: .systemFont(ofSize: 50))
-    }()
-    
-    private lazy var randomValueLabel: UILabel = {
-        createRandomValueLabel()
+        createLabel(with: String(randomNumber.maximumValue), andFont: .systemFont(ofSize: 50))
     }()
     
     private lazy var labelPretextFrom: UILabel = {
@@ -38,6 +33,10 @@ class MainViewController: UIViewController {
         createLabel(with: "to", andFont: .systemFont(ofSize: 29))
     }()
     
+    private lazy var randomValueLabel: UILabel = {
+        createRandomValueLabel()
+    }()
+    
     private lazy var randomNumberButton: UIButton = {
         var attributes = AttributeContainer()
         attributes.font = .systemFont(ofSize: 29)
@@ -46,18 +45,16 @@ class MainViewController: UIViewController {
         buttonConfiguration.baseBackgroundColor = UIColor(named: "randomButtonColor")
         buttonConfiguration.attributedTitle = AttributedString("Get Result", attributes: attributes)
         
-        let button = UIButton(configuration: buttonConfiguration, primaryAction: UIAction { [unowned self] _ in
-            getRandomNumberButton()
-        })
+        let button = UIButton(
+            configuration: buttonConfiguration,
+            primaryAction: UIAction { [unowned self] _ in
+                getRandomNumberButton()
+            })
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
     }()
-    
-    var getRandom: Int {
-        Int.random(in: minimumValue...maximumValue)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,27 +79,31 @@ class MainViewController: UIViewController {
     private func setupNavigationBar() {
         title = "Random Number"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
         
-        createCustomBarButtonItem()
+        let rightBarButtonItem = createCustomBarButtonItem()
+        
+        navigationItem.rightBarButtonItem = rightBarButtonItem
     }
     
-    private func createCustomBarButtonItem() {
+    private func createCustomBarButtonItem() -> UIBarButtonItem {
         let button = UIButton(type: .system)
         button.setTitle("Settings", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16)
         button.tintColor = .systemBlue
         button.addTarget(self, action: #selector(settingsButtonTapped), for: .touchUpInside)
         
-        let rightBarButton = UIBarButtonItem(customView: button)
-        navigationItem.rightBarButtonItem = rightBarButton
+        let barButtonItem = UIBarButtonItem(customView: button)
+        
+        return barButtonItem
     }
     
     @objc private func settingsButtonTapped() {
         let settingsViewController = SettingsViewController()
-        settingsViewController.minimumValue = minimumValueLabel.text ?? "0"
-        settingsViewController.maximumValue = maximumValueLabel.text ?? "100"
+        settingsViewController.randomNumber = randomNumber
         settingsViewController.delegate = self
         
-        present(settingsViewController, animated: true)
+        navigationController?.pushViewController(settingsViewController, animated: true)
     }
     
     private func setupSubviews(_ subviews: UIView...) {
@@ -118,10 +119,7 @@ class MainViewController: UIViewController {
     }
     
     private func stackViewConfigure() {
-        stackView.axis = .horizontal
-        stackView.alignment = .bottom
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 33
+        stackViewAutoLayouts()
         
         setupSubviewsForStackView(
             labelPretextTo,
@@ -133,8 +131,15 @@ class MainViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
     }
     
+    private func stackViewAutoLayouts() {
+        stackView.axis = .horizontal
+        stackView.alignment = .bottom
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 33
+    }
+    
     private func getRandomNumberButton() {
-        randomValueLabel.text = String(getRandom)
+        randomValueLabel.text = String(randomNumber.getRandom)
     }
     
     private func createLabel(with text: String, andFont: UIFont) -> UILabel {
@@ -151,7 +156,6 @@ class MainViewController: UIViewController {
         let label = UILabel()
         label.text = "?"
         label.font = UIFont.systemFont(ofSize: 98, weight: .semibold)
-        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -160,33 +164,56 @@ class MainViewController: UIViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate(
             [
-                stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
-                stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-                stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+                stackView.topAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.topAnchor,
+                    constant: 50
+                ),
+                stackView.leadingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 16
+                ),
+                stackView.trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -16
+                )
             ]
         )
         
         NSLayoutConstraint.activate(
             [
-                randomNumberButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -80),
-                randomNumberButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 57),
-                randomNumberButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -57)
+                randomNumberButton.bottomAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                    constant: -80
+                ),
+                randomNumberButton.leadingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: 57
+                ),
+                randomNumberButton.trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -57
+                )
             ]
         )
         
         NSLayoutConstraint.activate(
             [
-                randomValueLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                randomValueLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+                randomValueLabel.centerXAnchor.constraint(
+                    equalTo: view.centerXAnchor
+                ),
+                randomValueLabel.centerYAnchor.constraint(
+                    equalTo: view.centerYAnchor
+                )
             ]
         )
     }
 }
 
 extension MainViewController: SettingsViewControllerDelegate {
-    func setNewValues(for minimumNumber: String, and maximumNumber: String) {
-        minimumValueLabel.text = minimumNumber
-        maximumValueLabel.text = maximumNumber
+    func setNewValues(for randomNumber: RandomNumber) {
+        minimumValueLabel.text = String(randomNumber.minimumValue)
+        maximumValueLabel.text = String(randomNumber.maximumValue)
+        self.randomNumber = randomNumber
     }
 }
 
